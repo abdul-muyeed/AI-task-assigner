@@ -1,4 +1,5 @@
 import { IsEmail, IsString, MinLength, MaxLength, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
+import { UserType } from 'src/utils/types';
 
 export class SignUpDto {
     @IsEmail({}, { message: 'Please provide a valid email address' })
@@ -14,5 +15,8 @@ export class SignUpDto {
     @IsOptional()  
     @IsArray({ message: 'Skills must be an array' })
     @IsString({ each: true, message: 'Each skill must be a string' })
-    skills?: string[] = [];
+    skills?: string[];
+    // Optional field for user role, defaults to 'user'
+    @IsOptional()
+    role?: UserType;
 }

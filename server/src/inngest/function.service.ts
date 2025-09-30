@@ -1,24 +1,24 @@
 import { MailService } from 'src/mail/mail.service';
 import { UsersService } from 'src/users/users.service';
-import { Injectable } from "@nestjs/common";
-import { Inngest } from "inngest";
-import { User } from "src/users/schemas/user.schemas";
-
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import { Inngest } from 'inngest';
+import { User } from 'src/users/schemas/user.schemas';
+import { UsersRepository } from 'src/users/users.repo';
 
 @Injectable()
 export class FunctionService {
-    constructor(
-        private readonly usersService: UsersService,
-        private readonly mailService: MailService,
-    ) {}
+  constructor(
+    @Inject(forwardRef(() => UsersRepository))
+    private readonly mailService: MailService,
+    private readonly userRepo: UsersRepository,
+  ) {}
 
-    getAll(inngest:Inngest){
-        return [
-            this.onSignUp(inngest),
-        ]
-    }
+  getAll(inngest: Inngest) {
+    return [this.onSignUp(inngest)];
+  }
 
-    onSignUp = (inngest:Inngest) => inngest.createFunction(
+  onSignUp(inngest: Inngest) {
+    return inngest.createFunction(
       { id: 'on-user-signup', name: 'On User Sign Up', retries: 2 },
       { event: 'user/signup' },
       async ({ event, step }) => {
@@ -26,11 +26,14 @@ export class FunctionService {
           const { email } = event.data;
 
           // First step: Get user by email
-          const user: User = await step.run('get-user-email', async () => {
-            const user: User | null = await this.usersService.findOnebyEmail(email);
-            if (!user) throw new Error('User not found');
+          const user = await step.run('get-user-email', async () => {
+            const user = await this.userRepo.findOnebyEmail(email);
             return user;
           });
+
+          if (!user) {
+            throw new Error('User not found during signup process');
+          }
 
           // Second step: Send welcome email using the user from previous step
           await step.run('send-welcome-email', async () => {
@@ -46,12 +49,13 @@ export class FunctionService {
           });
 
           console.log('✅ User signup process completed for:', email);
-          return { success: true};
+          return { success: true };
         } catch (err) {
           console.error('❌ Error in on-user-signup function:', err);
-           // Re-throw to trigger Inngest retry mechanism
-           return { success: false, error: err.message }
+          // Re-throw to trigger Inngest retry mechanism
+          return { success: false, error: err.message };
         }
-      })
-    
+      },
+    );
+  }
 }

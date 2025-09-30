@@ -9,11 +9,9 @@ import { FunctionService } from './function.service';
 export class InngestService {
   private inngest: Inngest;
   readonly functions: any[];
-  
+
 
   constructor(
-    private readonly usersService: UsersService,
-    private readonly mailService: MailService,
     private readonly functionService: FunctionService
   ) {
     this.inngest = new Inngest({

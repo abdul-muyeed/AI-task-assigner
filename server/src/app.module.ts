@@ -6,11 +6,11 @@ import { TicketsModule } from './tickets/tickets.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './configs/load.config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Config } from './configs/default.config';
 import { InngestModule } from './inngest/inngest.module';
 import { MailModule } from './mail/mail.module';
 import { JwtModule } from '@nestjs/jwt';
-import { glob } from 'fs';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
@@ -38,6 +38,11 @@ import { glob } from 'fs';
     MailModule,
   ],
   controllers: [AppController],
-  providers: [AppService, Config],
+  providers: [AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    }
+  ],
 })
 export class AppModule {}

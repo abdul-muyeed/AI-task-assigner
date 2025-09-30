@@ -8,10 +8,21 @@ import { SignUpDto } from './dto/create-user.dto';
 export class UsersRepository {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async createUser(any: Partial<User>): Promise<User> {
-    return await this.userModel.create(any);
+  async createUser(data: Partial<User>): Promise<User> {
+    return await this.userModel.create(data);
   }
   async findOnebyEmail(email: string, withPassword?: boolean): Promise<User | null> {
     return await this.userModel.findOne({ email }, { password: withPassword ? 1 : 0 }).exec();
+  }
+  async findById(id: string): Promise<User | null> {
+    return await this.userModel.findById(id).exec();
+  }
+  async findAll(): Promise<User[]> {
+    return await this.userModel.find().exec();
+  }
+  async updateUser(id:string, data: Partial<User>): Promise<User | null> {
+    return await this.userModel
+      .findByIdAndUpdate(id, { $set: data }, { new: true })
+      .exec();
   }
 }

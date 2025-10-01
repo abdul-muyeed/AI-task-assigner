@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, Type } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserType } from 'src/utils/types';
+import { Types } from 'mongoose';
+import { R } from 'node_modules/@inngest/agent-kit/dist/agent-Prh3eG94';
 
 @Controller('tickets')
 export class TicketsController {
@@ -18,6 +20,15 @@ export class TicketsController {
   createTicket(@Body() createTicketDto: CreateTicketDto, @Request() req) {
     const userId = req.user._id;
     return this.ticketsService.createTicket(createTicketDto, userId);
+  }
+
+  async getTickets(@Request() req) {
+    const { id, role } = req.user;
+    return await this.ticketsService.getTickets(id, role);
+  }
+  async getTicket(@Param('id') ticketId: string, @Request() req) {
+    const { id, role } = req.user;
+    return await this.ticketsService.getTicketById(ticketId, role, id);
   }
 
   @Post()

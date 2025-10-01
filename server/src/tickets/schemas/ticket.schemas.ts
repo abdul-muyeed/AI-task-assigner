@@ -1,25 +1,25 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Types } from "mongoose";
-import { User } from "src/users/schemas/user.schemas";
-import { Task_Status } from "src/utils/types";
+import { Task_Status, Ticket_Priority } from "src/utils/types";
+
 
 export type TicketDoc = HydratedDocument<Ticket>
 @Schema({
     timestamps: true,
 })
 export class Ticket {
+    _id?: Types.ObjectId;
     @Prop({
         type:String
     })
-    ticket:string
+    title:string
     @Prop({
         type:String
     })
     description:string
     @Prop({
         type:String,
-        enum: Object.values(Task_Status),
-        default: Task_Status.PENDING
+        enum: Object.values(Task_Status)
     })
     status: Task_Status
     @Prop({
@@ -32,15 +32,28 @@ export class Ticket {
         ref: 'Users',
         required: false
     })
-    assignedTo?:User
-    @Prop()
-    priority: string
-    @Prop()
-    deadline: Date
-    @Prop()
-    helpfulNotes:string
-    @Prop()
-    relatedSkills:string[]
+    assignedTo?: Types.ObjectId
+    @Prop({
+        type: String,
+        enum: Object.values(Ticket_Priority),
+        required: false,
+    })
+    priority?: Ticket_Priority
+    @Prop({
+        type: Date,
+        required: false,
+    })
+    deadline?: Date
+    @Prop({
+        type: String,
+        required: false,
+    })
+    helpfulNotes?: string
+    @Prop({
+        type: [String],
+        required: false,
+    })
+    relatedSkills?: string[]
 
 }
 

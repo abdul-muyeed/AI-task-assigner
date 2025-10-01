@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@inngest/agent-kit':
-        specifier: ^0.9.0
-        version: 0.9.0(inngest@3.42.3(express@5.1.0)(typescript@5.9.2)(zod@4.1.11))
+        specifier: ^0.13.0
+        version: 0.13.0(inngest@3.44.0(express@5.1.0)(typescript@5.9.2)(zod@4.1.11))(zod@4.1.11)
       '@nestjs/common':
         specifier: ^11.0.1
         version: 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -42,8 +42,8 @@ importers:
         specifier: ^0.14.2
         version: 0.14.2
       inngest:
-        specifier: ^3.42.3
-        version: 3.42.3(express@5.1.0)(typescript@5.9.2)(zod@4.1.11)
+        specifier: ^3.44.0
+        version: 3.44.0(express@5.1.0)(typescript@5.9.2)(zod@4.1.11)
       mongoose:
         specifier: ^8.18.2
         version: 8.18.2
@@ -401,13 +401,11 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@inngest/agent-kit@0.9.0':
-    resolution: {integrity: sha512-/TdogdUvdo4mKa2CLnfQPRTXOW5bgDuvw1SewKS+iszDUzScH90nVCq/GFMEnTFvQnuFNSda080AScF+11ehag==}
+  '@inngest/agent-kit@0.13.0':
+    resolution: {integrity: sha512-4MkNUllJTyEACJCX2IcBnPsL7B5HPBp/XNRW43KKoYyC+Ieep7KKDAJhFvablMJXIrO17pEELcysr3mZBG4xnA==}
     peerDependencies:
-      inngest: '>=3.39.0'
-
-  '@inngest/ai@0.1.2':
-    resolution: {integrity: sha512-79Ez/2142GU5Fo44fMxo8rW6PaeVvIFnYqePdEeGTiymTGMMmcsAtrMTfnvq4AnMorFnrtTh6rr6P9xlSdhPJA==}
+      inngest: '>=3.43.1'
+      zod: '>=4 <5'
 
   '@inngest/ai@0.1.6':
     resolution: {integrity: sha512-4hIvD87LnMFSphkbSToB1EkE9epktyZU2xUj6OFCCj/bn379KfbZbhWcCJEyso0P9Ux4vsNTxiSu9E7JSI9HCQ==}
@@ -2652,8 +2650,8 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
-  inngest@3.42.3:
-    resolution: {integrity: sha512-jhN0jIKFnzB+zuYElKhzJ0MHVvl0AbhjPo2qcWpwjapT+t6jIV3/wqOCP0sGgMVbeluGqC6YxewJInlBTJ933A==}
+  inngest@3.44.0:
+    resolution: {integrity: sha512-FL+ztXhVaQTO5ARxXoXuoZ3FA7xSEPZxwcoYK1gzwJOlIC/wI6XzPcIPkG06eoIxtI9aDeU2p8agsf3GnhMD2w==}
     engines: {node: '>=20'}
     peerDependencies:
       '@sveltejs/kit': '>=1.27.3'
@@ -4431,24 +4429,18 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@inngest/agent-kit@0.9.0(inngest@3.42.3(express@5.1.0)(typescript@5.9.2)(zod@4.1.11))':
+  '@inngest/agent-kit@0.13.0(inngest@3.44.0(express@5.1.0)(typescript@5.9.2)(zod@4.1.11))(zod@4.1.11)':
     dependencies:
       '@dmitryrechkin/json-schema-to-zod': 1.0.1
-      '@inngest/ai': 0.1.2
+      '@inngest/ai': 0.1.6
       '@modelcontextprotocol/sdk': 1.18.1
       eventsource: 3.0.7
       express: 4.21.2
-      inngest: 3.42.3(express@5.1.0)(typescript@5.9.2)(zod@4.1.11)
+      inngest: 3.44.0(express@5.1.0)(typescript@5.9.2)(zod@4.1.11)
       xxhashjs: 0.2.2
-      zod: 3.25.76
-      zod-to-json-schema: 3.24.6(zod@3.25.76)
+      zod: 4.1.11
     transitivePeerDependencies:
       - supports-color
-
-  '@inngest/ai@0.1.2':
-    dependencies:
-      '@types/node': 22.18.6
-      typescript: 5.9.2
 
   '@inngest/ai@0.1.6':
     dependencies:
@@ -7195,7 +7187,7 @@ snapshots:
 
   inherits@2.0.4: {}
 
-  inngest@3.42.3(express@5.1.0)(typescript@5.9.2)(zod@4.1.11):
+  inngest@3.44.0(express@5.1.0)(typescript@5.9.2)(zod@4.1.11):
     dependencies:
       '@bufbuild/protobuf': 2.9.0
       '@inngest/ai': 0.1.6

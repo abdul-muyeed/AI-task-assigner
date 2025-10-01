@@ -14,7 +14,7 @@ export class MailService implements IMailService {
   private host: string = '';
   private secure: boolean = false;
   port: number = 0;
-  async send(to: string, subject: string, text: string) {
+  async send(to: string, subject?: string, text?: string) {
     const transporter = nodemailer.createTransport({
       host: this.configService.getOrThrow<string>('MAILTRAP_SMTP_HOST'),
       port: this.configService.getOrThrow<number>('MAILTRAP_SMTP_PORT'),
@@ -29,8 +29,8 @@ export class MailService implements IMailService {
     const info = await transporter.sendMail({
       from: '"MUI" <muyeed@example.com>', // sender address
       to,
-      subject,
-      text: 'Hello world?', // plain text body
+      subject: subject || 'Hello ✔', // Subject line
+      text: text || 'Hello world?', // plain text body
       html: '<b>Hello world?</b>', // html body
     });
 

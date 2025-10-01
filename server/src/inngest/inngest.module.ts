@@ -5,9 +5,10 @@ import { UsersModule } from '../users/users.module';
 import { MailModule } from '../mail/mail.module';
 import { FunctionService } from './function.service';
 import { forwardRef } from "@nestjs/common";
+import { TicketsModule } from 'src/tickets/tickets.module';
 
 @Module({
-  imports: [forwardRef(() => UsersModule), MailModule],
+  imports: [forwardRef(() => UsersModule), forwardRef(() => TicketsModule), MailModule],
   controllers: [InngestController],
   providers: [InngestService, FunctionService],
   exports: [InngestService],

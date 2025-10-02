@@ -1,174 +1,214 @@
-# AI-Powered Task Assigner API
+# AI Task Assigner (Monorepo)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![NestJS](https://img.shields.io/badge/Framework-NestJS-red.svg)](https://nestjs.com/)
-[![TypeScript](https://img.shields.io/badge/Language-TypeScript-blue.svg)](https://www.typescriptlang.org/)
+A full‑stack project management tool that analyzes tickets and helps teams assign work efficiently. The repository contains:
+- A NestJS API with JWT auth, MongoDB (Mongoose), Inngest-powered background jobs, and Nodemailer emails.
+- A React (Vite) client using Tailwind CSS v4 and shadcn/ui.
 
-A smart project management API that automates task delegation by analyzing task requirements and team member skills to suggest the most suitable person for the job.
+Badges: Node.js • PNPM • NestJS • React • Vite • Tailwind v4 • MongoDB
 
-## 📖 Table of Contents
+## Contents
+- Overview
+- Features
+- Tech Stack
+- Monorepo Structure
+- Getting Started
+- Configuration (Env)
+- Development
+- Build & Deploy
+- Scripts
+- API Quick Reference
+- Architecture
+- Contributing
+- License
 
-- [🌟 About the Project](#-about-the-project)
-- [✨ Key Features](#-key-features)
-- [🛠️ Tech Stack](#-tech-stack)
-- [🚀 Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Running the Application](#running-the-application)
-- [🔧 Configuration](#-configuration)
-- [📁 Project Structure](#-project-structure)
-- [⚙️ API Endpoints](#️-api-endpoints)
-- [🤝 Contributing](#-contributing)
-- [📜 License](#-license)
+## Overview
+The API exposes secure endpoints for users and tickets while delegating long‑running tasks (emails, analysis) to background jobs. The client provides modern, accessible UI screens (login, signup, dashboard, tickets) built with shadcn/ui and Tailwind v4.
 
-## 🌟 About the Project
+## Features
+- Authentication with JWT and role-based access
+- Ticket CRUD and listing
+- Background jobs via Inngest (e.g., welcome emails, ticket analysis)
+- Email notifications using Nodemailer
+- Modern UI with Tailwind v4 + shadcn/ui + React 19
+- DX: E2E/unit tests, linting, formatting
 
-The AI Task Assigner is a backend service designed to power a smart project management tool. It provides the core API for creating users, managing projects, handling tasks, and interacting with an asynchronous event-driven system for background processing. The key innovation lies in its ability to intelligently assign tasks, streamlining workflows and optimizing team productivity.
+## Tech Stack
+- Backend: NestJS, Mongoose, Inngest, Nodemailer, TypeScript
+- Frontend: React 19, Vite 7, Tailwind CSS v4, shadcn/ui, React Router 7
+- Tooling: ESLint, Prettier, PNPM
 
-## ✨ Key Features
+## Monorepo Structure
+```
+.
+├── client/               # React + Vite app
+│   ├── src/
+│   │   ├── pages/        # App pages (e.g., Dashboard, Tickets)
+│   │   ├── components/   # shadcn/ui components
+│   │   └── index.css     # Tailwind v4 entry
+│   └── vite.config.ts
+└── server/               # NestJS API
+    ├── src/
+    │   ├── app.module.ts
+    │   ├── main.ts
+    │   ├── users/
+    │   ├── tickets/
+    │   ├── mail/
+    │   └── inngest/
+    └── package.json
+```
 
-- **User Authentication**: Secure user registration and login using JWT (JSON Web Tokens).
-- **Role-Based Access Control (RBAC)**: Guards and decorators to protect endpoints based on user roles.
-- **Task Management**: Full CRUD functionality for managing tasks/tickets.
-- **Asynchronous Job Processing**: Utilizes **Inngest** for handling background tasks like sending welcome emails, ensuring a non-blocking user experience.
-- **Email Notifications**: Integrated with **Nodemailer** to send transactional emails.
-- **Scalable Architecture**: Built with NestJS, providing a modular and maintainable codebase.
+Key files:
+- Client: [client/src/index.css](client/src/index.css), [client/vite.config.ts](client/vite.config.ts), [client/src/pages/dashboard.tsx](client/src/pages/dashboard.tsx)
+- Server: [server/src/app.module.ts](server/src/app.module.ts), [server/src/main.ts](server/src/main.ts), [server/src/mail/mail.service.ts](server/src/mail/mail.service.ts), [server/src/inngest/inngest.controller.ts](server/src/inngest/inngest.controller.ts), [server/src/inngest/function.service.ts](server/src/inngest/function.service.ts), [server/src/users/users.service.ts](server/src/users/users.service.ts), [server/src/tickets/tickets.module.ts](server/src/tickets/tickets.module.ts)
 
-## 🛠️ Tech Stack
+Example UI pages:
+- Dashboard: [client/src/pages/dashboard.tsx](client/src/pages/dashboard.tsx)
+- Tickets list: [client/src/pages/tickets.tsx](client/src/pages/tickets.tsx)
+- Single ticket: [client/src/pages/ticket.tsx](client/src/pages/ticket.tsx)
+- Admin: [client/src/pages/admin.tsx](client/src/pages/admin.tsx)
+- Auth: [client/src/pages/login.tsx](client/src/pages/login.tsx), [client/src/pages/signup.tsx](client/src/pages/signup.tsx)
 
-- **Backend**: [NestJS](https://nestjs.com/)
-- **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Authentication**: [JWT](https://jwt.io/) (`@nestjs/jwt`)
-- **Event-Driven Jobs**: [Inngest](https://www.inngest.com/)
-- **Validation**: `class-validator`
-- **Emailing**: [Nodemailer](https://nodemailer.com/)
-- **Testing**: [Jest](https://jestjs.io/) & [Supertest](https://github.com/ladjs/supertest)
+## Getting Started
 
-## 🚀 Getting Started
+Prerequisites
+- Node.js 20+
+- PNPM 10+
+- MongoDB (local or Atlas)
+- Inngest Dev Server (for background jobs)
 
-Follow these instructions to get a local copy of the server up and running for development and testing.
+Install
+```sh
+# from the repo root
+cd server && pnpm i
+cd ../client && pnpm i
+```
 
-### Prerequisites
+## Configuration (Env)
 
-- [Node.js](https://nodejs.org/) (v20.x or higher recommended)
-- [pnpm](https://pnpm.io/) (or npm/yarn)
-- [MongoDB](https://www.mongodb.com/try/download/community) (or a MongoDB Atlas account)
-- [Inngest Dev Server](https://www.inngest.com/docs/getting-started/dev-server)
-
-### Installation
-
-1.  **Clone the repository:**
-    ```sh
-    git clone https://github.com/abdul-muyeed/AI-task-assigner.git
-    ```
-
-2.  **Navigate to the server directory:**
-    ```sh
-    cd AI-task-assigner/server
-    ```
-
-3.  **Install dependencies:**
-    ```sh
-    pnpm install
-    ```
-
-4.  **Set up environment variables:**
-    Create a `.env` file in the `server` directory by copying the example:
-    ```sh
-    cp .env.example .env
-    ```
-    Then, fill in the required values in the `.env` file. See the [Configuration](#-configuration) section for details.
-
-### Running the Application
-
-You need to run the Inngest development server and the NestJS application in separate terminals.
-
-1.  **Start the Inngest Dev Server:**
-    This provides a dashboard to view and debug background jobs.
-    ```sh
-    npx inngest-cli dev
-    ```
-    The Inngest dashboard will be available at `http://localhost:8288`.
-
-2.  **Start the NestJS Application:**
-    ```sh
-    # Development mode with hot-reloading
-    pnpm run start:dev
-    ```
-    The API server will be running at `http://localhost:3000`.
-
-## 🔧 Configuration
-
-The application is configured using environment variables. Create a `.env` file in the `server/` directory with the following variables:
-
+Server env (server/.env)
 ```env
-# Application
+# Core
 PORT=3000
+NODE_ENV=development
+CLIENT_URL=http://localhost:5173
 
-# MongoDB
+# Database
 MONGO_URI=mongodb://localhost:27017/ai_task_assigner
 
-# JWT Authentication
-JWT_SECRET=your-super-secret-key
+# JWT
+JWT_SECRET=your-super-secret
 JWT_EXPIRES_IN=1d
 
-# Inngest
-INNGEST_EVENT_KEY=your-inngest-event-key
-INNGEST_SIGNING_KEY=your-inngest-signing-key
+# Email (Mailtrap)
+MAILTRAP_SMTP_HOST=smtp.mailtrap.io
+MAILTRAP_SMTP_PORT=2525
+MAILTRAP_SMTP_USER=your-user
+MAILTRAP_SMTP_PASSWORD=your-pass
 
-# Nodemailer (Example for Gmail)
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USER=your-email@gmail.com
-MAIL_PASS=your-app-password
+# Optional
+GOOGLE_API_KEY=your-google-api-key
+```
+Notes:
+- Mail service reads MAILTRAP_* in [`MailService`](server/src/mail/mail.service.ts).
+- JWT config is loaded in [`AppModule`](server/src/app.module.ts).
+- Global config keys are defined in [`load.config.ts`](server/src/configs/load.config.ts).
+
+Client env (client/.env)
+```env
+# example
+VITE_API_BASE_URL=http://localhost:3000/api
 ```
 
-## 📁 Project Structure
+## Development
 
-The codebase is organized into modules for clear separation of concerns.
+Run the servers in separate terminals:
 
-```
-server/
-├── src/
-│   ├── app.module.ts       # Root application module
-│   ├── main.ts             # Application entry point
-│   ├── common/             # Shared utilities and interfaces
-│   ├── configs/            # Application configuration files
-│   ├── decorators/         # Custom decorators (e.g., @Roles)
-│   ├── guards/             # Custom guards (e.g., AuthGuard)
-│   ├── inngest/            # Inngest client and background functions
-│   ├── mail/               # Email sending service
-│   ├── tickets/            # Module for managing tickets/tasks
-│   └── users/              # Module for user management and authentication
-└── test/                   # End-to-end tests
+1) API (NestJS)
+```sh
+cd server
+pnpm run start:dev
+# http://localhost:3000 (API prefix: /api)
 ```
 
-## ⚙️ API Endpoints
+2) Inngest Dev Server (for background jobs dashboard)
+```sh
+cd server
+pnpm run start:inngest
+# http://localhost:8288
+```
 
-The API is prefixed with `/api`.
+3) Client (Vite)
+```sh
+cd client
+pnpm run dev
+# http://localhost:5173
+```
 
-| Method | Endpoint              | Description                               | Protected |
-| :----- | :-------------------- | :---------------------------------------- | :-------- |
-| `POST` | `/users/signup`       | Register a new user.                      | No        |
-| `POST` | `/users/login`        | Log in a user and receive a JWT.          | No        |
-| `GET`  | `/tickets`            | Get a list of all tickets.                | Yes       |
-| `POST` | `/tickets`            | Create a new ticket.                      | Yes       |
-| `GET`  | `/tickets/:id`        | Get a single ticket by its ID.            | Yes       |
-| `PATCH`| `/tickets/:id`        | Update a ticket by its ID.                | Yes       |
-| `DELETE`| `/tickets/:id`       | Delete a ticket by its ID.                | Yes       |
-| `ALL`  | `/inngest`            | Endpoint for Inngest to communicate with. | N/A       |
+## Build & Deploy
 
-## 🤝 Contributing
+Server
+```sh
+cd server
+pnpm build      # outputs to dist/
+pnpm start:prod # runs dist/main.js
+```
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Client
+```sh
+cd client
+pnpm build      # outputs to dist/
+pnpm preview    # local preview
+```
 
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
+## Scripts
 
-## 📜 License
+Server (see [server/package.json](server/package.json))
+- start:dev — run API with watch
+- start:prod — run compiled API
+- start:inngest — Inngest dev server
+- test, test:watch, test:cov — Jest
+- lint — ESLint
+- format — Prettier
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Client (see [client/package.json](client/package.json))
+- dev — Vite dev server
+- build — Type-check then build
+- preview — Preview built app
+- lint — ESLint
+
+## API Quick Reference
+
+All endpoints are prefixed with `/api`.
+
+| Method | Endpoint        | Description                       | Protected |
+| -----: | --------------- | --------------------------------- | --------- |
+| POST   | /users/signup   | Register a new user               | No        |
+| POST   | /users/login    | Login and receive a JWT           | No        |
+| GET    | /tickets        | List all tickets                  | Yes       |
+| POST   | /tickets        | Create a ticket                   | Yes       |
+| GET    | /tickets/:id    | Get a ticket by ID                | Yes       |
+| PATCH  | /tickets/:id    | Update a ticket                   | Yes       |
+| DELETE | /tickets/:id    | Delete a ticket                   | Yes       |
+| ALL    | /inngest        | Inngest webhook endpoint          | N/A       |
+
+## Architecture
+
+High‑level flow
+- HTTP requests enter the API at [`main.ts`](server/src/main.ts) and route via [`AppModule`](server/src/app.module.ts)
+- Auth and RBAC in Users and JWT modules (see [`users.service.ts`](server/src/users/users.service.ts))
+- Tickets module exposes CRUD (see [`tickets.module.ts`](server/src/tickets/tickets.module.ts))
+- Background jobs are registered in [`FunctionService`](server/src/inngest/function.service.ts) and served by [`InngestController`](server/src/inngest/inngest.controller.ts)
+- Emails are sent via [`MailService`](server/src/mail/mail.service.ts) using Mailtrap credentials
+
+Frontend notes
+- Tailwind v4 is enabled via [client/vite.config.ts](client/vite.config.ts) and styles are loaded in [client/src/index.css](client/src/index.css)
+- UI is composed with shadcn/ui components from `client/src/components/ui`
+
+## Contributing
+- Fork the project
+- Create a feature branch: `git checkout -b feat/awesome`
+- Commit: `pnpm -w lint` and `pnpm -w format` where applicable
+- Push and open a PR
+
+## License
+MIT — see LICENSE if present.

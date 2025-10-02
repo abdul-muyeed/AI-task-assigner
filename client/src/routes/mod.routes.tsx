@@ -4,7 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 
 
-const modRoutes = createBrowserRouter([
+export const modRoutes = createBrowserRouter([
   {
     path: "/login",
     element: <Login />

@@ -4,6 +4,7 @@ import { Signup } from "@/pages/signup";
 import { Tickets } from "@/pages/tickets";
 import { Ticket } from "@/pages/ticket";
 import { createBrowserRouter } from "react-router-dom";
+import { Dashboard } from "@/pages/dashboard";
 
 
 
@@ -11,6 +12,10 @@ export const adminRoutes = createBrowserRouter([
   {
     path: "/login",
     element: <Login />
+  },
+  {
+    path: "/",
+    element: <Dashboard />  
   },
   {
     path: "/home",

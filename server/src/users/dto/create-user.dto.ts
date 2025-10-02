@@ -12,7 +12,7 @@ export class SignUpDto {
     // @MaxLength(50, { message: 'Password must not exceed 50 characters' })
     password: string;
     // Optional field for user skills
-    @IsOptional()  
+    @IsOptional()
     @IsArray({ message: 'Skills must be an array' })
     @IsString({ each: true, message: 'Each skill must be a string' })
     skills?: string[];
